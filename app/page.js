@@ -114,7 +114,9 @@ export default function Home() {
   return (
     <Box  flexDirection={{ xs: 'column', md: 'row' }} width='100vw' height='100vh' display="flex" position="relative" overflow='hidden'>
       <Box width={"20%"} bgcolor={'#f0f0f0'} height={"100vh"}>
-        <Stack mt={30} padding={3} direction={'column'} spacing={2}>
+        <Stack mt={10} padding={3} direction={'column'} spacing={2}>
+          <ItemBox objectFit='cover'
+          ><img src="icon2.jpeg"/></ItemBox>
           <Button variant='outlined' startIcon={<HomeIcon color="secondary"/>}> Pantry</Button>
           <Button onClick={handleOpen} variant='outlined' startIcon={<AddIcon fontSize='large' color='success'/>} > Add New Item</Button> 
           <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title"  aria-describedby="modal-modal-description">
