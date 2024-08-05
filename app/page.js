@@ -23,11 +23,11 @@ const style = {
 const ItemBox = styled(Box)(({ theme }) => ({
      textAlign: 'center',
      '& img': {
-       width: '400px', // Adjust the width as needed
-       height: '400px', // Adjust the height as needed
-       objectFit: 'cover', // Ensures the image covers the box without distortion
-       borderRadius: '20px', // Optional: adds rounded corners
-       display: 'block', // Centers the image within the box
+       width: '60%',
+       height: '60%',
+       objectFit: 'cover',
+       borderRadius: '10%', 
+       display: 'block', 
        margin: 0 // Optional: adds a margin below the image
      },
    }));
@@ -43,7 +43,7 @@ export default function Home() {
     const handleClose = () => setOpen(false);
 
     const updatePantry = async () => {
-      const snapshot = query(collection(firestore, 'pantry')); // No need for query() if no filters
+      const snapshot = query(collection(firestore, 'pantry'));
       const docs = await getDocs(snapshot);
       const pantryList = []
       docs.forEach((doc) => {
@@ -60,11 +60,13 @@ export default function Home() {
     }, []);
   
     const addItem = async (name, quantity) => {
-      // Create a reference to the document in the 'pantry' collection
+      // Create a reference to the document in the pantry collection
       const docRef = doc(collection(firestore, 'pantry'), name);
 
       //get the current document information
       const docSnap = await getDoc(docRef);
+
+      //now convert the quantity to an integer 
      const quan = parseInt(quantity);
      console.log("Document reference:", docRef);
      console.log("Document snapshot exists:", docSnap.exists());
@@ -81,7 +83,7 @@ export default function Home() {
       }
       setItemName('');
       setQuantity('');
-      // Update the pantry list
+      // Always update the pantry list
       updatePantry();
   }
      const increement = async (name) => {
@@ -100,7 +102,7 @@ export default function Home() {
     const data = docSnap.data();
 
     if(data.item > 1) {
-      // Update the document with the new count
+      // update the count now!!!!!
       const updatedCount = data.item - 1;
       await setDoc(docRef, {item: updatedCount });
     }else {
@@ -110,8 +112,8 @@ export default function Home() {
   };
   const filteredPantryList = pantryList.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
   return (
-    <Box width='100vw' height='100vh' display="flex" position="relative" overflow='hidden'>
-      <Box width={"450px"} bgcolor={'#f0f0f0'} height={"100vh"}>
+    <Box  flexDirection={{ xs: 'column', md: 'row' }} width='100vw' height='100vh' display="flex" position="relative" overflow='hidden'>
+      <Box width={"20%"} bgcolor={'#f0f0f0'} height={"100vh"}>
         <Stack mt={30} padding={3} direction={'column'} spacing={2}>
           <Button variant='outlined' startIcon={<HomeIcon color="secondary"/>}> Pantry</Button>
           <Button onClick={handleOpen} variant='outlined' startIcon={<AddIcon fontSize='large' color='success'/>} > Add New Item</Button> 
@@ -134,7 +136,7 @@ export default function Home() {
         </Stack>
       </Box>
       <Box flex={1} bgcolor={'#B6D0E2'} height={"100vh"} overflow={'auto'}>
-        <Box padding={8} >
+        <Box padding={{xs: 4, sm:8}} >
           <Stack direction={'row'} width={'100%'}>
             <Typography variant='h1' fontSize={'4rem'} textAlign={'center'} color={'white'}>
               Welcome to your Smart Pantry!
@@ -144,16 +146,16 @@ export default function Home() {
             </Box>
           </Stack>
         </Box>
-        <Box mt={-20} padding={15} gap={0} display='grid' gridTemplateColumns="repeat(2, 1fr)" overflow='auto'>
+        <Box  display='grid' gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, 1fr)'}} gap={0} ml={{xs: 0, sm: '20%'}} overflow='auto'>
                {filteredPantryList.map(item => (
-            <ItemBox key={'item'} margin={5} width={400}>
+            <ItemBox key={'item'} padding={2} width={'100%'}>
               <img src="icon.jpeg" alt="Item 1" />
-              <Box bgcolor={'#40B5AD'}  borderRadius={5} height={200}>
-               <Typography padding={2} textAlign={'left'} color='white' variant="h4">{item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}</Typography>
-               <Typography padding={2} textAlign={'left'} color='white' variant='h5'>Quantity: {item.count}</Typography>
-                    <Button variant='outlined' size='large' color='success' onClick={() => increement(item.name)} startIcon={<AddIcon/>}></Button>
-                    <Button variant='outlined' size='large' color='error' onClick={() => removeItem(item.name)} startIcon={<DeleteIcon />}></Button>
-              </Box>
+              <Box bgcolor={'#40B5AD'}  borderRadius={'7%'} width='60%' height={'25%'}>
+               <Typography  ml={'5%'} textAlign={'left'} color='white' variant="h5">{item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}</Typography>
+               <Typography ml={'5%'} padding={1} textAlign={'left'} color='white' variant='h6'>Quantity: {item.count}</Typography>
+                    <Button variant='outlined' size='medium' color='success' onClick={() => increement(item.name)} startIcon={<AddIcon/>}></Button>
+                    <Button variant='outlined' size='medium' color='error' onClick={() => removeItem(item.name)} startIcon={<DeleteIcon />}></Button>
+          </Box>
        
             </ItemBox>
                ))}
