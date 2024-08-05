@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif; /* Apply your font */
+}
+
+/* body {
+  position: relative;
+  min-height: 100vh;
+  color: #333; /* Text color */
+  /* background-color: #f8f4f44f; Optional fallback color */
+  /* background-image: url('./download.jpeg');  */
+  /* background-size: cover; 
+  background-position: center; /* Center the image */
+  /* background-repeat: no-repeat; Do not repeat the image */
+/* } */
+
+/* body::before { */
+  /* content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay */
+  /* z-index: -1; /* Ensure overlay is below content */
+/* }  */
+
+/* .content { */
+  /* position: relative; */
+  /* z-index: 1; Ensure content is above the overlay */
+  /* padding: 20px; Add some padding to the content */
+/* }  */
