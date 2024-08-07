@@ -1,5 +1,5 @@
 'use client'
-import {Box, Stack, Typography, Button, Modal, TextField} from '@mui/material'
+import {Box, Stack, Typography, Button, Modal, TextField, FormControl, InputLabel, Select, MenuItem} from '@mui/material'
 import { useEffect, useState} from 'react';
 import { firestore } from './firebase';
 import { getDocs, doc, deleteDoc, getDoc, collection, query, setDoc} from 'firebase/firestore';
@@ -38,9 +38,57 @@ export default function Home() {
     const [quantity, setQuantity] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [openAddItem, setOpenAddItem] = useState(false);
+    const handleOpen = () => setOpenAddItem(true);
+    const handleClose = () => setOpenAddItem(false);
+
+    const [openRecipes, setOpenRecipe] = useState(false);
+    const openRecipe = () => setOpenRecipe(true);
+    const closeRecipe = () => setOpenRecipe(false);
+
+    const [ingredients, setIngredients] = useState([]);
+    const [selectedIngredients, setselectedIngredients] = useState([]);
+    const [recipe, setRecipe] = useState('');
+
+    const handleSuggestRecipe = async () => {
+      const recipeIngredients = selectedIngredients.map(ingredient => ingredient.trim()).join(', ');
+    
+      try {
+        const response = await fetch('/app/server', { 
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ingredients: recipeIngredients.split(', ') }), 
+        });
+    
+        const data = await response.json();
+        if (response.ok) {
+          setRecipe(data.recipe);
+          openRecipe();
+        } else {
+          console.error('Error:', data.error);
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+  
+  
+
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      const snapshot = await getDocs(collection(firestore, 'pantry'));
+      const ingredientsList = snapshot.docs.map(doc => doc.id);
+      setIngredients(ingredientsList);
+      console.log(ingredientsList);
+    };
+    fetchIngredients();
+  }, []);
+
+  const handleIngredientChange = (event) => {
+    setselectedIngredients(event.target.value);
+  };
 
     const updatePantry = async () => {
       const snapshot = query(collection(firestore, 'pantry'));
@@ -119,7 +167,7 @@ export default function Home() {
           ><img src="icon2.jpeg"/></ItemBox>
           <Button variant='outlined' startIcon={<HomeIcon color="secondary"/>}> Pantry</Button>
           <Button onClick={handleOpen} variant='outlined' startIcon={<AddIcon fontSize='large' color='success'/>} > Add New Item</Button> 
-          <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title"  aria-describedby="modal-modal-description">
+          <Modal open={openAddItem} onClose={handleClose} aria-labelledby="modal-modal-title"  aria-describedby="modal-modal-description">
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 Add Item
@@ -134,7 +182,27 @@ export default function Home() {
             </Box>
           </Modal>
           
-          <Button variant='outlined' >Recipes</Button>
+          <Button onClick={openRecipe} variant='outlined' >Recipes</Button>
+          
+          <Modal open={openRecipes} onClose={closeRecipe} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description' >
+            <Box sx={{ top: '10%', left: '20%', display: 'block', position: 'absolute', bgcolor: 'whitesmoke',
+              width: '70%', height: '80%', alignItems: 'center', textAlign: 'center' }}>
+              <Typography variant='h4' bgcolor={'#d67964'}>Select your ingredients to get a Recipe</Typography>
+              <FormControl fullWidth>
+                <InputLabel id="ingredient select label" bgcolor='white' >Select Ingredient</InputLabel>
+                <Select labelId="ingredient select label" id="ingredient label" multiple value={selectedIngredients} label="Ingredient"
+                  onChange={handleIngredientChange}>
+                  {ingredients.map((ingredient, index) => (
+                    <MenuItem value={ingredient} key={index} >{ingredient}</MenuItem>))}
+                </Select>
+              </FormControl>
+              <Button onClick={handleSuggestRecipe} variant='contained' color='secondary'>Get Recipe</Button>
+              <Typography variant='h4' bgcolor={'#b79f9a'}>Recipe Suggestion</Typography>
+                    <Typography bgcolor={'whitesmoke'} variant='h6'> Your recipe is going to show up here! {recipe} </Typography>
+              {/* <Button onClick={() => closeRecipe()} variant='contained' color='primary'>Close</Button> */}
+            </Box>
+          </Modal>
+
         </Stack>
       </Box>
       <Box flex={1} bgcolor={'#B6D0E2'} height={"100vh"} overflow={'auto'}>
