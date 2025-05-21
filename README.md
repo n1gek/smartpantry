@@ -1,4 +1,54 @@
+# 🛒 Smart Pantry Manager
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+*A seamless grocery management experience with AI-powered recipe suggestions*
+
+## 🌟 Features
+
+### 🏷️ Pantry Management
+- **Add/Remove Items** - Intuitive interface for managing pantry inventory
+- **Expiration Tracking** - Never waste food again with smart expiry alerts
+- **Category Organization** - Automatically categorize groceries (produce, dairy, etc.)
+
+### 🧠 AI Integration
+- **Recipe Generation** - GPT-powered personalized recipes using available ingredients
+- **Smart Substitutions** - Suggests ingredient alternatives when items are missing
+- **Dietary Adaptation** - Automatically adjusts recipes for dietary restrictions
+
+### 📱 User Experience
+- **Responsive Design** - Works flawlessly on desktop, tablet & mobile
+- **Visual Inventory** - Photo-based item tracking (Material UI image upload)
+- **Shopping List** - One-click transfer of missing ingredients to shopping list
+
+## 🛠️ Tech Stack
+
+| Category       | Technologies Used |
+|----------------|-------------------|
+| Frontend       | Next.js, Material UI, React Hook Form |
+| Backend        | Node.js, Next.js API Routes |
+| AI Integration | OpenAI API (GPT-4) |
+| Database       | PostgreSQL/MySQL |
+| Deployment     | Vercel/Netlify |
+| Testing        | Jest, React Testing Library |
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js v18+
+- Firebase database
+- OpenAI API key
+
+### Installation
+```bash
+# Clone repository
+git clone https://github.com/your-username/smart-pantry.git
+cd smart-pantry
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
 
 ## Getting Started
 
